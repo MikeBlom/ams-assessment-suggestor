@@ -111,7 +111,7 @@ const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: Assessment
         <p className="text-muted-foreground">
           {showAllTypes 
             ? "Browse all available assessment types"
-            : "Based on your recent Cell Structure module and biology teaching patterns"
+            : "Based on your recent Linear Equations module and math teaching patterns"
           }
         </p>
       </div>

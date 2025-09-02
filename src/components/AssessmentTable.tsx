@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Plus, Tag, Download, Share, Trash2, BarChart3 } from "lucide-react";
+import { ChevronDown, Plus, Tag, Download, Share, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -21,9 +21,11 @@ import { Badge } from "@/components/ui/badge";
 interface Assessment {
   id: string;
   name: string;
-  outcomes: string;
-  dateAssessed: string;
-  type: "Quiz" | "Portfolio" | "Discussion" | "Assignment" | "Video" | "LLM-powered" | "Observation" | "Adaptive" | "Branching";
+  core: string;
+  standards: string;
+  subject: string;
+  type: "Formative" | "Benchmark";
+  creator: string;
 }
 
 const AssessmentTable = () => {
@@ -33,87 +35,39 @@ const AssessmentTable = () => {
   const assessments: Assessment[] = [
     {
       id: "1",
-      name: "Cell Structure and Function Quiz",
-      outcomes: "BIO.1.2, BIO.1.4, BIO.2.1",
-      dateAssessed: "Oct 15, 2024",
-      type: "Quiz"
+      name: "Mathematical Aptitude Assessment",
+      core: "UT:Core Standards 2025",
+      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
+      subject: "Math",
+      type: "Formative",
+      creator: "Devon Hailey"
     },
     {
       id: "2", 
-      name: "Photosynthesis Lab Assessment",
-      outcomes: "BIO.3.1, BIO.3.2, BIO.4.1",
-      dateAssessed: "Oct 12, 2024",
-      type: "Assignment"
+      name: "Scientific Understanding Evaluation",
+      core: "UT:Core Standards 2025",
+      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
+      subject: "Science",
+      type: "Formative",
+      creator: "Devon Hailey"
     },
     {
       id: "3",
-      name: "Mitosis and Meiosis Portfolio", 
-      outcomes: "BIO.2.3, BIO.2.4, BIO.5.1",
-      dateAssessed: "Oct 8, 2024",
-      type: "Portfolio"
+      name: "Science Exploration Challenge", 
+      core: "UT:Core Standards 2016",
+      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
+      subject: "Language Arts",
+      type: "Benchmark",
+      creator: "Devon Hailey"
     },
     {
       id: "4",
-      name: "Genetics Problem Solving",
-      outcomes: "BIO.5.2, BIO.5.3, BIO.6.1",
-      dateAssessed: "Oct 5, 2024",
-      type: "Discussion"
-    },
-    {
-      id: "5",
-      name: "DNA Replication Video Explanation",
-      outcomes: "BIO.4.2, BIO.4.3",
-      dateAssessed: "Oct 1, 2024",
-      type: "Video"
-    },
-    {
-      id: "6",
-      name: "Enzyme Function Analysis",
-      outcomes: "BIO.3.3, BIO.3.4, BIO.3.5",
-      dateAssessed: "Sep 28, 2024",
-      type: "LLM-powered"
-    },
-    {
-      id: "7",
-      name: "Microscopy Lab Skills",
-      outcomes: "BIO.1.1, BIO.1.3",
-      dateAssessed: "Sep 25, 2024",
-      type: "Observation"
-    },
-    {
-      id: "8",
-      name: "Cellular Respiration Adaptive Test",
-      outcomes: "BIO.3.6, BIO.3.7, BIO.4.4",
-      dateAssessed: "Sep 22, 2024",
-      type: "Adaptive"
-    },
-    {
-      id: "9",
-      name: "Evolution Case Study Portfolio",
-      outcomes: "BIO.6.2, BIO.6.3, BIO.6.4",
-      dateAssessed: "Sep 18, 2024",
-      type: "Portfolio"
-    },
-    {
-      id: "10",
-      name: "Ecology Branching Scenarios",
-      outcomes: "BIO.7.1, BIO.7.2, BIO.7.3",
-      dateAssessed: "Sep 15, 2024",
-      type: "Branching"
-    },
-    {
-      id: "11",
-      name: "Molecular Biology Discussion Forum",
-      outcomes: "BIO.4.5, BIO.4.6",
-      dateAssessed: "Sep 12, 2024",
-      type: "Discussion"
-    },
-    {
-      id: "12",
-      name: "Plant Biology Field Observation",
-      outcomes: "BIO.7.4, BIO.7.5, BIO.8.1",
-      dateAssessed: "Sep 8, 2024",
-      type: "Observation"
+      name: "Tech Innovation Assessment",
+      core: "UT:Core Standards 2016", 
+      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
+      subject: "Science",
+      type: "Benchmark",
+      creator: "Devon Hailey"
     }
   ];
 
@@ -209,10 +163,11 @@ const AssessmentTable = () => {
                 />
               </TableHead>
               <TableHead className="font-medium">Name</TableHead>
-              <TableHead className="font-medium">Outcomes</TableHead>
-              <TableHead className="font-medium">Date Assessed</TableHead>
+              <TableHead className="font-medium">Core</TableHead>
+              <TableHead className="font-medium">Standards</TableHead>
+              <TableHead className="font-medium">Subject</TableHead>
               <TableHead className="font-medium">Type</TableHead>
-              <TableHead className="font-medium">Reports</TableHead>
+              <TableHead className="font-medium">Creator</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -234,33 +189,35 @@ const AssessmentTable = () => {
                     {assessment.name}
                   </Button>
                 </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {assessment.core}
+                </TableCell>
                 <TableCell>
                   <Button
                     variant="link" 
                     className="p-0 h-auto text-primary font-normal text-left"
                   >
-                    {assessment.outcomes}
+                    {assessment.standards}
                   </Button>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {assessment.dateAssessed}
+                  {assessment.subject}
                 </TableCell>
                 <TableCell>
                   <Badge 
-                    variant="secondary"
+                    variant={assessment.type === "Formative" ? "secondary" : "outline"}
                     className="text-xs"
                   >
                     {assessment.type}
                   </Badge>
                 </TableCell>
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                  >
-                    <BarChart3 className="w-4 h-4 text-muted-foreground" />
-                  </Button>
+                <TableCell className="text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-medium">
+                      DH
+                    </div>
+                    {assessment.creator}
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
