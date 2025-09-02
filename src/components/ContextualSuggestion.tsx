@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 
 interface ContextualSuggestionProps {
   onResponse: (accepted: boolean) => void;
-  onBack: () => void;
+  onBack?: () => void;
   onBrowseAll: () => void;
 }
 
