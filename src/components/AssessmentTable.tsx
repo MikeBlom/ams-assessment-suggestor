@@ -21,11 +21,9 @@ import { Badge } from "@/components/ui/badge";
 interface Assessment {
   id: string;
   name: string;
-  core: string;
   standards: string;
   subject: string;
-  type: "Formative" | "Benchmark";
-  creator: string;
+  type: "Quiz" | "Assignment" | "Discussion" | "Portfolio" | "Video" | "Observation with Rubric";
 }
 
 const AssessmentTable = () => {
@@ -35,39 +33,87 @@ const AssessmentTable = () => {
   const assessments: Assessment[] = [
     {
       id: "1",
-      name: "Mathematical Aptitude Assessment",
-      core: "UT:Core Standards 2025",
-      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
-      subject: "Math",
-      type: "Formative",
-      creator: "Devon Hailey"
+      name: "Cell Structure and Function Assessment",
+      standards: "HS.BIO.1.1, HS.BIO.1.2, HS.BIO.1.3",
+      subject: "Biology",
+      type: "Quiz"
     },
     {
       id: "2", 
-      name: "Scientific Understanding Evaluation",
-      core: "UT:Core Standards 2025",
-      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
-      subject: "Science",
-      type: "Formative",
-      creator: "Devon Hailey"
+      name: "Photosynthesis Lab Report",
+      standards: "HS.BIO.2.1, HS.BIO.2.2",
+      subject: "Biology",
+      type: "Assignment"
     },
     {
       id: "3",
-      name: "Science Exploration Challenge", 
-      core: "UT:Core Standards 2016",
-      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
-      subject: "Language Arts",
-      type: "Benchmark",
-      creator: "Devon Hailey"
+      name: "DNA Replication Process Quiz", 
+      standards: "HS.BIO.3.1, HS.BIO.3.2, HS.BIO.3.3",
+      subject: "Biology",
+      type: "Quiz"
     },
     {
       id: "4",
-      name: "Tech Innovation Assessment",
-      core: "UT:Core Standards 2016", 
-      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
-      subject: "Science",
-      type: "Benchmark",
-      creator: "Devon Hailey"
+      name: "Ecosystem Dynamics Discussion",
+      standards: "HS.BIO.4.1, HS.BIO.4.2", 
+      subject: "Biology",
+      type: "Discussion"
+    },
+    {
+      id: "5",
+      name: "Protein Synthesis Video Explanation",
+      standards: "HS.BIO.3.4, HS.BIO.3.5",
+      subject: "Biology",
+      type: "Video"
+    },
+    {
+      id: "6",
+      name: "Mitosis and Meiosis Comparison",
+      standards: "HS.BIO.3.6, HS.BIO.3.7",
+      subject: "Biology",
+      type: "Assignment"
+    },
+    {
+      id: "7",
+      name: "Evolution Evidence Portfolio",
+      standards: "HS.BIO.5.1, HS.BIO.5.2, HS.BIO.5.3",
+      subject: "Biology",
+      type: "Portfolio"
+    },
+    {
+      id: "8",
+      name: "Enzyme Activity Lab Performance",
+      standards: "HS.BIO.2.3, HS.BIO.2.4",
+      subject: "Biology",
+      type: "Observation with Rubric"
+    },
+    {
+      id: "9",
+      name: "Genetics Problem Solving Quiz",
+      standards: "HS.BIO.3.8, HS.BIO.3.9",
+      subject: "Biology",
+      type: "Quiz"
+    },
+    {
+      id: "10",
+      name: "Cellular Respiration Pathway Analysis",
+      standards: "HS.BIO.2.5, HS.BIO.2.6",
+      subject: "Biology",
+      type: "Assignment"
+    },
+    {
+      id: "11",
+      name: "Biodiversity Conservation Discussion",
+      standards: "HS.BIO.4.3, HS.BIO.4.4",
+      subject: "Biology",
+      type: "Discussion"
+    },
+    {
+      id: "12",
+      name: "Molecular Biology Techniques Portfolio",
+      standards: "HS.BIO.6.1, HS.BIO.6.2",
+      subject: "Biology",
+      type: "Portfolio"
     }
   ];
 
@@ -163,11 +209,9 @@ const AssessmentTable = () => {
                 />
               </TableHead>
               <TableHead className="font-medium">Name</TableHead>
-              <TableHead className="font-medium">Core</TableHead>
               <TableHead className="font-medium">Standards</TableHead>
               <TableHead className="font-medium">Subject</TableHead>
               <TableHead className="font-medium">Type</TableHead>
-              <TableHead className="font-medium">Creator</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -189,9 +233,6 @@ const AssessmentTable = () => {
                     {assessment.name}
                   </Button>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {assessment.core}
-                </TableCell>
                 <TableCell>
                   <Button
                     variant="link" 
@@ -205,19 +246,11 @@ const AssessmentTable = () => {
                 </TableCell>
                 <TableCell>
                   <Badge 
-                    variant={assessment.type === "Formative" ? "secondary" : "outline"}
+                    variant={assessment.type === "Quiz" ? "secondary" : "outline"}
                     className="text-xs"
                   >
                     {assessment.type}
                   </Badge>
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-medium">
-                      DH
-                    </div>
-                    {assessment.creator}
-                  </div>
                 </TableCell>
               </TableRow>
             ))}
