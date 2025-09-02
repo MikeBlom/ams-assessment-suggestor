@@ -13,8 +13,8 @@ interface AssessmentCreationOverlayProps {
 type FlowStep = "decision" | "contextual" | "direct" | "type-selection";
 
 const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverlayProps) => {
-  const [currentStep, setCurrentStep] = useState<FlowStep>("decision");
-  const [selectedPath, setSelectedPath] = useState<"contextual" | "direct" | null>(null);
+  const [currentStep, setCurrentStep] = useState<FlowStep>("contextual");
+  const [selectedPath, setSelectedPath] = useState<"contextual" | "direct" | null>("contextual");
 
   if (!isOpen) return null;
 
@@ -32,9 +32,11 @@ const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverla
       // Would navigate to pre-configured builder
       console.log("Navigating to pre-configured assessment builder");
       onClose();
-    } else {
-      setCurrentStep("type-selection");
     }
+  };
+
+  const handleBrowseAll = () => {
+    setCurrentStep("type-selection");
   };
 
   const handleTypeSelection = (type: string) => {
@@ -106,6 +108,7 @@ const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverla
           <ContextualSuggestion 
             onResponse={handleContextualResponse}
             onBack={() => setCurrentStep("decision")}
+            onBrowseAll={handleBrowseAll}
           />
         );
       case "type-selection":

@@ -129,7 +129,7 @@ const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: Assessment
       {/* Header */}
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold text-foreground">
-          {fromContextual ? "Choose a Different Assessment Type" : "Choose Assessment Type"}
+          Browse All Assessment Types
         </h2>
         <p className="text-muted-foreground">
           Select the type of assessment that best fits your teaching goals
