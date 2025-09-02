@@ -1,4 +1,5 @@
-import { ArrowLeft, FileText, MessageSquare, Brain, Video, Eye, Grid, TreePine, ScrollText } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, FileText, MessageSquare, Brain, Video, Eye, Grid, TreePine, ScrollText, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,55 +11,49 @@ interface AssessmentTypeSelectorProps {
 }
 
 const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: AssessmentTypeSelectorProps) => {
-  const assessmentTypes = [
-    {
-      id: "assignment",
-      name: "Assignment",
-      description: "Traditional project or task-based assessment",
-      icon: FileText,
-      difficulty: "Easy",
-      time: "15-30 min setup",
-      popular: true,
-      features: ["File submissions", "Rubric grading", "Due dates", "Late penalties"]
-    },
-    {
-      id: "discussion",
-      name: "Discussion",
-      description: "Collaborative conversation and peer interaction",
-      icon: MessageSquare,
-      difficulty: "Easy",
-      time: "10-20 min setup",
-      popular: true,
-      features: ["Threaded replies", "Peer responses", "Moderation tools", "Grading criteria"]
-    },
+  const [showAllTypes, setShowAllTypes] = useState(false);
+
+  const recommendedTypes = [
     {
       id: "quiz",
       name: "Quiz",
       description: "Multiple choice, short answer, and mixed question types",
       icon: ScrollText,
-      difficulty: "Medium",
-      time: "20-45 min setup",
-      popular: true,
-      features: ["Auto-grading", "Question banks", "Time limits", "Multiple attempts"]
+      features: ["Auto-grading", "Question banks", "Time limits", "Multiple attempts"],
+      reason: "Most used for algebra concepts"
+    },
+    {
+      id: "assignment",
+      name: "Assignment", 
+      description: "Traditional project or task-based assessment",
+      icon: FileText,
+      features: ["File submissions", "Rubric grading", "Due dates", "Late penalties"],
+      reason: "Great for problem-solving practice"
     },
     {
       id: "portfolio",
       name: "Portfolio",
       description: "Collection of student work demonstrating growth",
       icon: Grid,
-      difficulty: "Medium",
-      time: "30-60 min setup",
-      popular: false,
-      features: ["Multiple artifacts", "Reflection prompts", "Progress tracking", "Showcase format"]
+      features: ["Multiple artifacts", "Reflection prompts", "Progress tracking", "Showcase format"],
+      reason: "Perfect for showing mathematical reasoning"
+    }
+  ];
+
+  const allAssessmentTypes = [
+    ...recommendedTypes,
+    {
+      id: "discussion",
+      name: "Discussion",
+      description: "Collaborative conversation and peer interaction", 
+      icon: MessageSquare,
+      features: ["Threaded replies", "Peer responses", "Moderation tools", "Grading criteria"]
     },
     {
       id: "llm-powered",
       name: "LLM-powered Assignment",
       description: "AI-assisted assessment with intelligent feedback",
       icon: Brain,
-      difficulty: "Advanced",
-      time: "25-40 min setup",
-      popular: false,
       features: ["AI feedback", "Smart grading", "Writing analysis", "Plagiarism detection"],
       badge: "New"
     },
@@ -67,9 +62,6 @@ const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: Assessment
       name: "Video",
       description: "Video recording or presentation assessment",
       icon: Video,
-      difficulty: "Easy",
-      time: "15-25 min setup",
-      popular: false,
       features: ["Recording tools", "Time limits", "Annotation support", "Privacy controls"]
     },
     {
@@ -77,42 +69,27 @@ const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: Assessment
       name: "Observation with Rubric",
       description: "Real-time assessment with structured observation",
       icon: Eye,
-      difficulty: "Medium",
-      time: "20-35 min setup",
-      popular: false,
       features: ["Custom rubrics", "Real-time scoring", "Evidence collection", "Multiple observers"]
     },
     {
-      id: "item-based",
-      name: "Item Based Assessment",
-      description: "Structured assessment with predefined item types",
-      icon: Grid,
-      difficulty: "Medium",
-      time: "25-40 min setup",
-      popular: false,
-      features: ["Item templates", "Standards alignment", "Detailed analytics", "Question weighting"]
+      id: "adaptive",
+      name: "Adaptive",
+      description: "Assessment that adapts difficulty based on student responses",
+      icon: TreePine,
+      features: ["Difficulty adjustment", "Personalized paths", "Smart progression", "Analytics"],
+      badge: "Advanced"
     },
     {
-      id: "adaptive",
-      name: "Adaptive / Branching",
-      description: "Dynamic assessment that adapts to student responses",
+      id: "branching",
+      name: "Branching",
+      description: "Conditional pathways based on student choices and performance",
       icon: TreePine,
-      difficulty: "Advanced",
-      time: "45-90 min setup",
-      popular: false,
-      features: ["Conditional logic", "Personalized paths", "Difficulty adjustment", "Advanced analytics"],
+      features: ["Conditional logic", "Multiple scenarios", "Decision trees", "Custom flows"],
       badge: "Advanced"
     }
   ];
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "Easy": return "text-emerald-600 bg-emerald-100";
-      case "Medium": return "text-amber-600 bg-amber-100";
-      case "Advanced": return "text-red-600 bg-red-100";
-      default: return "text-gray-600 bg-gray-100";
-    }
-  };
+  const typesToShow = showAllTypes ? allAssessmentTypes : recommendedTypes;
 
   return (
     <div className="space-y-6">
@@ -129,16 +106,19 @@ const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: Assessment
       {/* Header */}
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold text-foreground">
-          Browse All Assessment Types
+          {showAllTypes ? "All Assessment Types" : "Recommended for You"}
         </h2>
         <p className="text-muted-foreground">
-          Select the type of assessment that best fits your teaching goals
+          {showAllTypes 
+            ? "Browse all available assessment types"
+            : "Based on your recent Linear Equations module and math teaching patterns"
+          }
         </p>
       </div>
 
       {/* Assessment Types Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {assessmentTypes.map((type) => (
+        {typesToShow.map((type) => (
           <Card 
             key={type.id}
             className="p-6 hover:bg-accent/50 cursor-pointer transition-all border-2 hover:border-primary/30 hover:shadow-md"
@@ -151,10 +131,7 @@ const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: Assessment
                   <type.icon className="w-6 h-6 text-primary" />
                 </div>
                 <div className="flex flex-col space-y-1">
-                  {type.popular && (
-                    <Badge variant="secondary" className="text-xs">Popular</Badge>
-                  )}
-                  {type.badge && (
+                  {'badge' in type && type.badge && (
                     <Badge variant="outline" className="text-xs">{type.badge}</Badge>
                   )}
                 </div>
@@ -166,14 +143,11 @@ const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: Assessment
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {type.description}
                 </p>
-              </div>
-
-              {/* Metadata */}
-              <div className="flex items-center justify-between text-xs">
-                <span className={`px-2 py-1 rounded-full font-medium ${getDifficultyColor(type.difficulty)}`}>
-                  {type.difficulty}
-                </span>
-                <span className="text-muted-foreground">{type.time}</span>
+                {'reason' in type && (
+                  <p className="text-xs text-primary font-medium">
+                    {type.reason}
+                  </p>
+                )}
               </div>
 
               {/* Features */}
@@ -196,6 +170,27 @@ const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: Assessment
             </div>
           </Card>
         ))}
+      </div>
+
+      {/* Toggle to show all types */}
+      <div className="text-center pt-4 border-t border-border">
+        <Button 
+          variant="outline" 
+          onClick={() => setShowAllTypes(!showAllTypes)}
+          className="w-full"
+        >
+          {showAllTypes ? (
+            <>
+              <ChevronUp className="w-4 h-4 mr-2" />
+              Show recommended only
+            </>
+          ) : (
+            <>
+              <ChevronDown className="w-4 h-4 mr-2" />
+              Browse all assessment types
+            </>
+          )}
+        </Button>
       </div>
     </div>
   );

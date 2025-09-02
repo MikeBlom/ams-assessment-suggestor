@@ -105,7 +105,7 @@ const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSug
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-2">
-                    <h4 className="text-lg font-semibold text-foreground">{assessment.type} Assessment</h4>
+                    <h4 className="text-lg font-semibold text-foreground">{assessment.type}</h4>
                     {assessment.recommended && <Badge variant="secondary">Recommended</Badge>}
                   </div>
                   <p className="text-muted-foreground mb-3">{assessment.description}</p>
