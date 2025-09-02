@@ -1,8 +1,9 @@
-import { ArrowRight, CheckCircle, FileText, Users, Brain, MessageSquare, ScrollText, Video, BarChart3, Plus, RotateCcw, PlusCircle, Copy } from "lucide-react";
+import { ArrowRight, CheckCircle, FileText, Users, Brain, MessageSquare, ScrollText, Video, BarChart3, Plus, RotateCcw, PlusCircle, Copy, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 
 interface ContextualSuggestionProps {
   onResponse: (accepted: boolean) => void;
@@ -11,182 +12,174 @@ interface ContextualSuggestionProps {
 }
 
 const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSuggestionProps) => {
-  // Multiple recently completed modules in Biology 101
-  const recentlyCompleted = [
+  const [selectedContext, setSelectedContext] = useState("Cell Structure and Function");
+  
+  // Different types of recent activity items
+  const recentActivities = [
     {
+      type: "Recently completed",
+      icon: CheckCircle,
       title: "Cell Structure and Function",
-      completedDate: "2 days ago",
-      studentsCompleted: 23,
-      totalStudents: 27
+      detail: "Completed 2 days ago • 23/27 students",
+      color: "emerald"
     },
     {
-      title: "Photosynthesis and Cellular Respiration",
-      completedDate: "1 week ago", 
-      studentsCompleted: 25,
-      totalStudents: 27
+      type: "Recently assessed",
+      icon: RotateCcw,
+      title: "Photosynthesis Quiz",
+      detail: "Last assessed 1 week ago • 3 students requested retake",
+      color: "blue"
     },
     {
-      title: "DNA Replication and Protein Synthesis",
-      completedDate: "2 weeks ago",
-      studentsCompleted: 27,
-      totalStudents: 27
+      type: "Recently completed assignment",
+      icon: FileText,
+      title: "DNA Lab Report",
+      detail: "Lab completed 3 days ago • 27 students submitted",
+      color: "purple"
+    },
+    {
+      type: "Last assessment built",
+      icon: Copy,
+      title: "Mitosis Quiz Template",
+      detail: "Built 3 days ago • High engagement (92% completion)",
+      color: "orange"
     }
   ];
 
-  const assessmentOptions = {
-    retake: [
-      {
-        type: "Quiz",
-        title: "Photosynthesis Quiz",
-        description: "Light-dependent and light-independent reactions",
-        icon: ScrollText,
-        features: ["Auto-graded problems", "Immediate feedback", "Multiple attempts"],
-        detail: "From 'Photosynthesis and Cellular Respiration' • 3 students requested retake"
-      },
-      {
-        type: "Test", 
-        title: "Cell Organelles Test",
-        description: "Structure and function of cellular components",
-        icon: FileText,
-        features: ["Multiple choice", "Short answer", "Diagram labeling"],
-        detail: "From 'Cell Structure and Function' • 5 students requested retake"
-      },
-      {
-        type: "Quiz",
-        title: "DNA Structure Quiz", 
-        description: "Nucleotide composition and base pairing",
-        icon: ScrollText,
-        features: ["Interactive diagrams", "Immediate scoring", "Hint system"],
-        detail: "From 'DNA Replication and Protein Synthesis' • 2 students requested retake"
-      }
-    ],
-    assess: [
+  // Context-specific template options
+  const contextualTemplates = {
+    "Cell Structure and Function": [
       {
         type: "Portfolio",
-        title: "Cell Structure Lab Report Assessment",
-        description: "Microscopy observations and analysis",
+        title: "Cell Organelle Analysis",
+        description: "Multi-step microscopy and function analysis",
         icon: FileText,
-        features: ["Real-world application", "Scientific writing", "Data interpretation"],
-        detail: "From 'Cell Structure and Function' lab • 27 students submitted"
+        features: ["Microscopy skills", "Function analysis", "Scientific writing"],
+        reason: "Perfect for hands-on cell structure learning"
       },
-      {
-        type: "Discussion",
-        title: "Photosynthesis vs Cellular Respiration",
-        description: "Compare and contrast energy processes",
-        icon: MessageSquare,
-        features: ["Peer comparison", "Process analysis", "Energy flow concepts"],
-        detail: "From 'Photosynthesis and Cellular Respiration' • 25 students participated"
-      },
-      {
-        type: "Project",
-        title: "DNA Mutation Case Study",
-        description: "Analyze real genetic disorders",
-        icon: Brain,
-        features: ["Case-based learning", "Research component", "Presentation element"],
-        detail: "From 'DNA Replication and Protein Synthesis' • Research presentations due"
-      }
-    ],
-    duplicate: [
       {
         type: "Quiz",
-        title: "Mitosis Quiz Template",
-        description: "Cell division phases and checkpoints",
+        title: "Organelle Functions Quiz",
+        description: "Interactive assessment of cellular components",
         icon: ScrollText,
-        features: ["Visual diagrams", "Phase identification", "Process sequencing"],
-        detail: "Built 3 days ago • High student engagement (92% completion)"
+        features: ["Drag-and-drop labeling", "Function matching", "Auto-graded"],
+        reason: "Most effective for structure-function relationships"
+      },
+      {
+        type: "Discussion", 
+        title: "Cell Theory Debate",
+        description: "Historical perspectives on cell discovery",
+        icon: MessageSquare,
+        features: ["Historical analysis", "Peer discussion", "Critical thinking"],
+        reason: "Great for conceptual understanding"
+      }
+    ],
+    "Photosynthesis and Cellular Respiration": [
+      {
+        type: "Portfolio",
+        title: "Energy Flow Analysis",
+        description: "Multi-step energy transformation tracking",
+        icon: FileText,
+        features: ["Process diagrams", "Energy calculations", "Real-world applications"],
+        reason: "Perfect for understanding energy conversions"
+      },
+      {
+        type: "Quiz",
+        title: "Light/Dark Reactions Quiz", 
+        description: "Comprehensive photosynthesis assessment",
+        icon: ScrollText,
+        features: ["Process sequencing", "Molecule tracking", "Location identification"],
+        reason: "Most used for photosynthesis concepts"
       },
       {
         type: "Test",
-        title: "Biology Unit Test Template",
-        description: "Comprehensive cellular biology assessment",
-        icon: FileText,
-        features: ["Outcomes aligned", "Mixed question types", "Detailed rubric"],
-        detail: "Built last week • Used by 3 other instructors"
-      },
-      {
-        type: "Portfolio",
-        title: "Lab Report Portfolio Template",
-        description: "Scientific method and data analysis framework",
-        icon: Users,
-        features: ["Structured format", "Reflection prompts", "Peer review component"],
-        detail: "Built 2 weeks ago • Improved student writing by 15%"
+        title: "Cellular Respiration Test",
+        description: "Complete ATP production pathway assessment",
+        icon: Brain,
+        features: ["Multi-step processes", "Enzyme functions", "Energy yield calculations"],
+        reason: "Comprehensive coverage of respiration"
       }
     ],
-    scratch: [
+    "DNA Replication and Protein Synthesis": [
       {
-        type: "Portfolio",
-        description: "Multi-step problem solving with reflection",
-        icon: FileText,
-        features: ["Real-world application problems", "Step-by-step solution process", "Self-reflection component"],
-        reason: "Perfect for showing biological reasoning"
-      },
-      {
-        type: "Discussion",
-        description: "Collaborative analysis of biological concepts",
-        icon: MessageSquare,
-        features: ["Peer concept comparison", "Strategy discussion", "Group insights"],
-        reason: "Great for complex biology topics"
+        type: "Project",
+        title: "Genetic Mutation Case Study",
+        description: "Real-world genetic disorder analysis",
+        icon: Users,
+        features: ["Case analysis", "Research component", "Presentation element"],
+        reason: "Perfect for applied genetics learning"
       },
       {
         type: "Quiz",
-        description: "Mixed question types testing core concepts",
+        title: "Central Dogma Quiz",
+        description: "DNA to protein pathway assessment", 
         icon: ScrollText,
-        features: ["Auto-graded problems", "Immediate feedback", "Multiple attempts"],
-        reason: "Most used for biology concepts"
+        features: ["Step sequencing", "Codon translation", "Error identification"],
+        reason: "Most effective for process understanding"
+      },
+      {
+        type: "Discussion",
+        title: "Genetic Engineering Ethics",
+        description: "Modern biotechnology implications",
+        icon: MessageSquare,
+        features: ["Ethical reasoning", "Current events", "Peer perspectives"],
+        reason: "Great for contemporary applications"
       }
     ]
   };
 
-  const renderAssessmentCard = (assessment: any, index: number, isFromScratch = false) => (
+  const renderAssessmentCard = (assessment: any, index: number) => (
     <Card 
-      key={assessment.title || assessment.type}
-      className={`p-6 cursor-pointer transition-all border-2 hover:shadow-md ${
-        index === 0 && !isFromScratch
+      key={assessment.title}
+      className={`p-4 cursor-pointer transition-all border-2 hover:shadow-md ${
+        index === 0
           ? 'border-primary/20 bg-primary/5 hover:border-primary/40' 
           : 'border-border hover:border-primary/30 hover:bg-accent/50'
       }`}
       onClick={() => onResponse(true)}
     >
-      <div className="flex items-start space-x-4">
-        <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-          index === 0 && !isFromScratch ? 'bg-primary/10' : 'bg-accent'
+      <div className="flex items-start space-x-3">
+        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+          index === 0 ? 'bg-primary/10' : 'bg-accent'
         }`}>
-          <assessment.icon className={`w-6 h-6 ${
-            index === 0 && !isFromScratch ? 'text-primary' : 'text-muted-foreground'
+          <assessment.icon className={`w-5 h-5 ${
+            index === 0 ? 'text-primary' : 'text-muted-foreground'
           }`} />
         </div>
         <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-2">
-            <h4 className="text-lg font-semibold text-foreground">
-              {assessment.title || assessment.type}
-            </h4>
-            {index === 0 && !isFromScratch && <Badge variant="secondary">Recommended</Badge>}
+          <div className="flex items-center space-x-2 mb-1">
+            <h4 className="font-semibold text-foreground">{assessment.title}</h4>
+            {index === 0 && <Badge variant="secondary" className="text-xs">Recommended</Badge>}
           </div>
-          <p className="text-muted-foreground mb-3">{assessment.description}</p>
+          <p className="text-sm text-muted-foreground mb-2">{assessment.description}</p>
           
-          {assessment.detail && (
-            <p className="text-sm text-emerald-600 font-medium mb-2">{assessment.detail}</p>
-          )}
-          
-          <div className="space-y-2">
-            {assessment.reason && (
-              <div className="text-sm text-primary font-medium">
-                {assessment.reason}
-              </div>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {assessment.features.map((feature: string, featureIndex: number) => (
-                <Badge key={featureIndex} variant="outline" className="text-xs">
+          <div className="space-y-1">
+            <div className="text-xs text-primary font-medium">
+              {assessment.reason}
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {assessment.features.slice(0, 3).map((feature: string, featureIndex: number) => (
+                <Badge key={featureIndex} variant="outline" className="text-xs px-1 py-0">
                   {feature}
                 </Badge>
               ))}
             </div>
           </div>
         </div>
-        <ArrowRight className="w-5 h-5 text-muted-foreground" />
+        <ArrowRight className="w-4 h-4 text-muted-foreground" />
       </div>
     </Card>
   );
+
+  const getColorClasses = (color: string) => {
+    const colors = {
+      emerald: "bg-emerald-100 text-emerald-700",
+      blue: "bg-blue-100 text-blue-700", 
+      purple: "bg-purple-100 text-purple-700",
+      orange: "bg-orange-100 text-orange-700"
+    };
+    return colors[color as keyof typeof colors] || colors.emerald;
+  };
 
   return (
     <div className="space-y-6">
@@ -202,128 +195,54 @@ const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSug
           </div>
         </div>
 
-        {/* Recently Completed Items */}
-        <div className="space-y-3">
-          <div className="flex items-center space-x-2">
-            <CheckCircle className="w-4 h-4 text-emerald-600" />
-            <span className="text-sm font-medium text-foreground">Recently completed</span>
-          </div>
-          <div className="grid gap-3">
-            {recentlyCompleted.map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border">
-                <div>
-                  <h4 className="font-medium text-foreground">{item.title}</h4>
-                  <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                    <span>Completed {item.completedDate}</span>
-                    <span>{item.studentsCompleted}/{item.totalStudents} students</span>
-                  </div>
+        {/* Recent Activities with specific indicators */}
+        <div className="grid gap-3">
+          {recentActivities.map((item, index) => (
+            <Card 
+              key={index} 
+              className={`p-3 cursor-pointer transition-all border ${
+                item.title === selectedContext 
+                  ? 'border-primary/50 bg-primary/5' 
+                  : 'border-border hover:border-primary/30 hover:bg-accent/50'
+              }`}
+              onClick={() => setSelectedContext(item.title)}
+            >
+              <div className="flex items-center space-x-3">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${getColorClasses(item.color)}`}>
+                  <item.icon className="w-4 h-4" />
                 </div>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="outline" className="text-xs">{item.type}</Badge>
+                  </div>
+                  <h4 className="font-medium text-foreground">{item.title}</h4>
+                  <p className="text-xs text-muted-foreground">{item.detail}</p>
+                </div>
+                {item.title === selectedContext && <CheckCircle className="w-4 h-4 text-primary" />}
               </div>
-            ))}
-          </div>
+            </Card>
+          ))}
         </div>
       </div>
 
-      {/* Action Tabs */}
-      <Tabs defaultValue="scratch" className="w-full">
-        <div className="flex items-center justify-between mb-4">
+      {/* Contextual Templates */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-foreground">
-            What would you like to do?
+            Ready-to-use templates for "{selectedContext}"
           </h3>
+          <Button variant="outline" size="sm" onClick={onBrowseAll}>
+            <Plus className="w-4 h-4 mr-1" />
+            Build My Own
+          </Button>
         </div>
         
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="retake" className="flex items-center gap-2">
-            <RotateCcw className="w-4 h-4" />
-            Retake
-          </TabsTrigger>
-          <TabsTrigger value="assess" className="flex items-center gap-2">
-            <FileText className="w-4 h-4" />
-            Assess
-          </TabsTrigger>
-          <TabsTrigger value="duplicate" className="flex items-center gap-2">
-            <Copy className="w-4 h-4" />
-            Duplicate
-          </TabsTrigger>
-          <TabsTrigger value="scratch" className="flex items-center gap-2">
-            <PlusCircle className="w-4 h-4" />
-            Start from Scratch
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="retake" className="space-y-4 mt-6">
-          <div className="space-y-3">
-            <p className="text-muted-foreground">Give students another chance with these previously assessed concepts</p>
-            <div className="grid gap-4">
-              {assessmentOptions.retake.map((assessment, index) => 
-                renderAssessmentCard(assessment, index)
-              )}
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="assess" className="space-y-4 mt-6">
-          <div className="space-y-3">
-            <p className="text-muted-foreground">Create assessments based on recently completed activities</p>
-            <div className="grid gap-4">
-              {assessmentOptions.assess.map((assessment, index) => 
-                renderAssessmentCard(assessment, index)
-              )}
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="duplicate" className="space-y-4 mt-6">
-          <div className="space-y-3">
-            <p className="text-muted-foreground">Reuse and customize your previous successful assessments</p>
-            <div className="grid gap-4">
-              {assessmentOptions.duplicate.map((assessment, index) => 
-                renderAssessmentCard(assessment, index)
-              )}
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="scratch" className="space-y-4 mt-6">
-          <div className="space-y-3">
-            <p className="text-muted-foreground">Build a new assessment from the ground up</p>
-            
-            {/* Primary "Build My Own" Card */}
-            <Card 
-              className="p-6 cursor-pointer transition-all border-2 border-primary/30 bg-primary/5 hover:border-primary/50 hover:bg-primary/10 mb-6"
-              onClick={onBrowseAll}
-            >
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <Plus className="w-6 h-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="secondary">Primary Option</Badge>
-                    </div>
-                    <h4 className="text-xl font-semibold text-foreground">Build My Own</h4>
-                    <p className="text-muted-foreground">Choose your assessment type and build it your way</p>
-                    <p className="text-sm text-primary font-medium">
-                      Full control • All assessment types available
-                    </p>
-                  </div>
-                </div>
-                <ArrowRight className="w-5 h-5 text-primary" />
-              </div>
-            </Card>
-
-            <div className="border-t pt-4">
-              <h4 className="text-md font-medium text-foreground mb-3">Or start with a template:</h4>
-              <div className="grid gap-4">
-                {assessmentOptions.scratch.map((assessment, index) => 
-                  renderAssessmentCard(assessment, index, true)
-                )}
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-      </Tabs>
+        <div className="grid gap-3">
+          {(contextualTemplates[selectedContext as keyof typeof contextualTemplates] || []).map((assessment, index) => 
+            renderAssessmentCard(assessment, index)
+          )}
+        </div>
+      </div>
     </div>
   );
 };
