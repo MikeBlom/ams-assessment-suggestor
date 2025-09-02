@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle, FileText, Users, Brain, MessageSquare, ScrollText, Video } from "lucide-react";
+import { ArrowRight, CheckCircle, FileText, Users, Brain, MessageSquare, ScrollText, Video, BarChart3, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,43 +12,43 @@ interface ContextualSuggestionProps {
 const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSuggestionProps) => {
   // Mock recent module data - in real app this would come from context/API
   const recentModule = {
-    title: "Linear Equations and Inequalities",
-    subject: "Algebra I",
+    title: "Cell Structure and Function",
+    subject: "Biology 101",
     completedDate: "2 days ago",
     studentsCompleted: 23,
     totalStudents: 27
   };
 
-  const suggestedAssessments = [
+  const smartSuggestions = [
     {
-      type: "Portfolio",
-      description: "Multi-step problem solving with reflection",
-      icon: FileText,
-      estimatedTime: "45 minutes",
-      features: ["Real-world application problems", "Step-by-step solution process", "Self-reflection component"],
-      recommended: true
-    },
-    {
-      type: "Discussion",
-      description: "Collaborative analysis of problem-solving approaches",
-      icon: MessageSquare,
-      estimatedTime: "30 minutes",
-      features: ["Peer problem comparison", "Strategy discussion", "Group insights"],
-      recommended: false
-    },
-    {
-      type: "Quiz",
-      description: "Mixed question types testing core concepts",
+      type: "Recently assessed concepts",
+      title: "Retake: Photosynthesis Quiz",
+      description: "Allow students to reassess photosynthesis concepts",
       icon: ScrollText,
-      estimatedTime: "25 minutes", 
-      features: ["Auto-graded problems", "Immediate feedback", "Multiple attempts"],
-      recommended: false
+      context: "Last assessed 1 week ago • 3 students requested retake",
+      action: () => onResponse(true)
+    },
+    {
+      type: "Recently completed assignments",
+      title: "Assess: Cell Structure Lab Report",
+      description: "Create follow-up assessment for lab completion",
+      icon: FileText,
+      context: "Lab completed 2 days ago • 27 students submitted",
+      action: () => onResponse(true)
+    },
+    {
+      type: "Last assessment built",
+      title: "Duplicate: Mitosis Quiz Template",
+      description: "Use your successful mitosis quiz structure",
+      icon: Brain,
+      context: "Built 3 days ago • High student engagement",
+      action: () => onResponse(true)
     }
   ];
 
   return (
     <div className="space-y-6">
-      {/* Context Recognition */}
+      {/* Header */}
       <div className="space-y-4">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
@@ -56,7 +56,7 @@ const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSug
           </div>
           <div>
             <h2 className="text-2xl font-semibold text-foreground">Smart Assessment Suggestions</h2>
-            <p className="text-muted-foreground">Based on your recent teaching activity</p>
+            <p className="text-muted-foreground">Based on your recent teaching activity in Biology 101</p>
           </div>
         </div>
 
@@ -78,72 +78,68 @@ const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSug
         </Card>
       </div>
 
-      {/* Suggested Assessments */}
+      {/* Smart Suggestions */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-foreground">
-          Ready-to-use assessments for "{recentModule.title}"
+          Quick start options
         </h3>
         
         <div className="grid gap-4">
-          {suggestedAssessments.map((assessment, index) => (
+          {smartSuggestions.map((suggestion, index) => (
             <Card 
               key={index}
-              className={`p-6 cursor-pointer transition-all border-2 hover:shadow-md ${
-                assessment.recommended 
-                  ? 'border-primary/20 bg-primary/5 hover:border-primary/40' 
-                  : 'border-border hover:border-primary/30 hover:bg-accent/50'
-              }`}
-              onClick={() => onResponse(true)}
+              className="p-6 cursor-pointer transition-all border-2 hover:border-primary/30 hover:bg-accent/50 hover:shadow-md"
+              onClick={suggestion.action}
             >
               <div className="flex items-start space-x-4">
-                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                  assessment.recommended ? 'bg-primary/10' : 'bg-accent'
-                }`}>
-                  <assessment.icon className={`w-6 h-6 ${
-                    assessment.recommended ? 'text-primary' : 'text-muted-foreground'
-                  }`} />
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                  <suggestion.icon className="w-6 h-6 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <h4 className="text-lg font-semibold text-foreground">{assessment.type}</h4>
-                    {assessment.recommended && <Badge variant="secondary">Recommended</Badge>}
-                  </div>
-                  <p className="text-muted-foreground mb-3">{assessment.description}</p>
-                  
                   <div className="space-y-2">
-                    <div className="text-sm text-muted-foreground">
-                      <span className="font-medium">Estimated time:</span> {assessment.estimatedTime}
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        {suggestion.type}
+                      </span>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {assessment.features.map((feature, featureIndex) => (
-                        <Badge key={featureIndex} variant="outline" className="text-xs">
-                          {feature}
-                        </Badge>
-                      ))}
-                    </div>
+                    <h4 className="text-lg font-semibold text-foreground">{suggestion.title}</h4>
+                    <p className="text-muted-foreground">{suggestion.description}</p>
+                    <p className="text-sm text-primary font-medium">
+                      {suggestion.context}
+                    </p>
                   </div>
                 </div>
                 <ArrowRight className="w-5 h-5 text-muted-foreground" />
               </div>
             </Card>
           ))}
-        </div>
-      </div>
-
-      {/* Browse All Option */}
-      <div className="pt-4 border-t border-border">
-        <div className="text-center space-y-3">
-          <p className="text-sm text-muted-foreground">
-            Don't see what you need?
-          </p>
-          <Button 
-            variant="outline" 
+          
+          {/* Build My Own Option */}
+          <Card 
+            className="p-6 cursor-pointer transition-all border-2 border-dashed hover:border-primary/30 hover:bg-accent/50"
             onClick={onBrowseAll}
-            size="lg"
-            className="w-full"
           >
-            Browse all assessment types
-          </Button>
+            <div className="flex items-start space-x-4">
+              <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
+                <Plus className="w-6 h-6 text-muted-foreground" />
+              </div>
+              <div className="flex-1">
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                      Build my own
+                    </span>
+                  </div>
+                  <h4 className="text-lg font-semibold text-foreground">Start from scratch</h4>
+                  <p className="text-muted-foreground">Choose your assessment type and build it your way</p>
+                  <p className="text-sm text-blue-600 font-medium">
+                    Full control • All assessment types available
+                  </p>
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-muted-foreground" />
+            </div>
+          </Card>
         </div>
       </div>
     </div>

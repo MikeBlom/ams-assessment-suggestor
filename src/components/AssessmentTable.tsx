@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Plus, Tag, Download, Share, Trash2 } from "lucide-react";
+import { ChevronDown, Plus, Tag, Download, Share, Trash2, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -22,10 +22,9 @@ interface Assessment {
   id: string;
   name: string;
   core: string;
-  standards: string;
-  subject: string;
+  outcomes: string;
+  dateAssessed: string;
   type: "Formative" | "Benchmark";
-  creator: string;
 }
 
 const AssessmentTable = () => {
@@ -35,39 +34,35 @@ const AssessmentTable = () => {
   const assessments: Assessment[] = [
     {
       id: "1",
-      name: "Mathematical Aptitude Assessment",
-      core: "UT:Core Standards 2025",
-      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
-      subject: "Math",
-      type: "Formative",
-      creator: "Devon Hailey"
+      name: "Cell Structure and Function Quiz",
+      core: "Biology 101 - University Core",
+      outcomes: "BIO.1.2, BIO.1.4, BIO.2.1",
+      dateAssessed: "Oct 15, 2024",
+      type: "Formative"
     },
     {
       id: "2", 
-      name: "Scientific Understanding Evaluation",
-      core: "UT:Core Standards 2025",
-      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
-      subject: "Science",
-      type: "Formative",
-      creator: "Devon Hailey"
+      name: "Photosynthesis Lab Assessment",
+      core: "Biology 101 - University Core",
+      outcomes: "BIO.3.1, BIO.3.2, BIO.4.1",
+      dateAssessed: "Oct 12, 2024",
+      type: "Formative"
     },
     {
       id: "3",
-      name: "Science Exploration Challenge", 
-      core: "UT:Core Standards 2016",
-      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
-      subject: "Language Arts",
-      type: "Benchmark",
-      creator: "Devon Hailey"
+      name: "Mitosis and Meiosis Portfolio", 
+      core: "Biology 101 - University Core",
+      outcomes: "BIO.2.3, BIO.2.4, BIO.5.1",
+      dateAssessed: "Oct 8, 2024",
+      type: "Benchmark"
     },
     {
       id: "4",
-      name: "Tech Innovation Assessment",
-      core: "UT:Core Standards 2016", 
-      standards: "XX.XXXX.XX, XX.X.XX, XX.XXXX.XX, XX.XX...",
-      subject: "Science",
-      type: "Benchmark",
-      creator: "Devon Hailey"
+      name: "Genetics Problem Solving",
+      core: "Biology 101 - University Core", 
+      outcomes: "BIO.5.2, BIO.5.3, BIO.6.1",
+      dateAssessed: "Oct 5, 2024",
+      type: "Benchmark"
     }
   ];
 
@@ -164,10 +159,10 @@ const AssessmentTable = () => {
               </TableHead>
               <TableHead className="font-medium">Name</TableHead>
               <TableHead className="font-medium">Core</TableHead>
-              <TableHead className="font-medium">Standards</TableHead>
-              <TableHead className="font-medium">Subject</TableHead>
+              <TableHead className="font-medium">Outcomes</TableHead>
+              <TableHead className="font-medium">Date Assessed</TableHead>
               <TableHead className="font-medium">Type</TableHead>
-              <TableHead className="font-medium">Creator</TableHead>
+              <TableHead className="font-medium">Reports</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -197,11 +192,11 @@ const AssessmentTable = () => {
                     variant="link" 
                     className="p-0 h-auto text-primary font-normal text-left"
                   >
-                    {assessment.standards}
+                    {assessment.outcomes}
                   </Button>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {assessment.subject}
+                  {assessment.dateAssessed}
                 </TableCell>
                 <TableCell>
                   <Badge 
@@ -211,13 +206,14 @@ const AssessmentTable = () => {
                     {assessment.type}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-medium">
-                      DH
-                    </div>
-                    {assessment.creator}
-                  </div>
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                  >
+                    <BarChart3 className="w-4 h-4 text-muted-foreground" />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
