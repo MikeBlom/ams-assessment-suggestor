@@ -21,10 +21,9 @@ import { Badge } from "@/components/ui/badge";
 interface Assessment {
   id: string;
   name: string;
-  core: string;
   outcomes: string;
   dateAssessed: string;
-  type: "Formative" | "Benchmark";
+  type: "Quiz" | "Portfolio" | "Discussion" | "Assignment" | "Video" | "LLM-powered" | "Observation" | "Adaptive" | "Branching";
 }
 
 const AssessmentTable = () => {
@@ -35,34 +34,86 @@ const AssessmentTable = () => {
     {
       id: "1",
       name: "Cell Structure and Function Quiz",
-      core: "Biology 101 - University Core",
       outcomes: "BIO.1.2, BIO.1.4, BIO.2.1",
       dateAssessed: "Oct 15, 2024",
-      type: "Formative"
+      type: "Quiz"
     },
     {
       id: "2", 
       name: "Photosynthesis Lab Assessment",
-      core: "Biology 101 - University Core",
       outcomes: "BIO.3.1, BIO.3.2, BIO.4.1",
       dateAssessed: "Oct 12, 2024",
-      type: "Formative"
+      type: "Assignment"
     },
     {
       id: "3",
       name: "Mitosis and Meiosis Portfolio", 
-      core: "Biology 101 - University Core",
       outcomes: "BIO.2.3, BIO.2.4, BIO.5.1",
       dateAssessed: "Oct 8, 2024",
-      type: "Benchmark"
+      type: "Portfolio"
     },
     {
       id: "4",
       name: "Genetics Problem Solving",
-      core: "Biology 101 - University Core", 
       outcomes: "BIO.5.2, BIO.5.3, BIO.6.1",
       dateAssessed: "Oct 5, 2024",
-      type: "Benchmark"
+      type: "Discussion"
+    },
+    {
+      id: "5",
+      name: "DNA Replication Video Explanation",
+      outcomes: "BIO.4.2, BIO.4.3",
+      dateAssessed: "Oct 1, 2024",
+      type: "Video"
+    },
+    {
+      id: "6",
+      name: "Enzyme Function Analysis",
+      outcomes: "BIO.3.3, BIO.3.4, BIO.3.5",
+      dateAssessed: "Sep 28, 2024",
+      type: "LLM-powered"
+    },
+    {
+      id: "7",
+      name: "Microscopy Lab Skills",
+      outcomes: "BIO.1.1, BIO.1.3",
+      dateAssessed: "Sep 25, 2024",
+      type: "Observation"
+    },
+    {
+      id: "8",
+      name: "Cellular Respiration Adaptive Test",
+      outcomes: "BIO.3.6, BIO.3.7, BIO.4.4",
+      dateAssessed: "Sep 22, 2024",
+      type: "Adaptive"
+    },
+    {
+      id: "9",
+      name: "Evolution Case Study Portfolio",
+      outcomes: "BIO.6.2, BIO.6.3, BIO.6.4",
+      dateAssessed: "Sep 18, 2024",
+      type: "Portfolio"
+    },
+    {
+      id: "10",
+      name: "Ecology Branching Scenarios",
+      outcomes: "BIO.7.1, BIO.7.2, BIO.7.3",
+      dateAssessed: "Sep 15, 2024",
+      type: "Branching"
+    },
+    {
+      id: "11",
+      name: "Molecular Biology Discussion Forum",
+      outcomes: "BIO.4.5, BIO.4.6",
+      dateAssessed: "Sep 12, 2024",
+      type: "Discussion"
+    },
+    {
+      id: "12",
+      name: "Plant Biology Field Observation",
+      outcomes: "BIO.7.4, BIO.7.5, BIO.8.1",
+      dateAssessed: "Sep 8, 2024",
+      type: "Observation"
     }
   ];
 
@@ -158,7 +209,6 @@ const AssessmentTable = () => {
                 />
               </TableHead>
               <TableHead className="font-medium">Name</TableHead>
-              <TableHead className="font-medium">Core</TableHead>
               <TableHead className="font-medium">Outcomes</TableHead>
               <TableHead className="font-medium">Date Assessed</TableHead>
               <TableHead className="font-medium">Type</TableHead>
@@ -184,9 +234,6 @@ const AssessmentTable = () => {
                     {assessment.name}
                   </Button>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {assessment.core}
-                </TableCell>
                 <TableCell>
                   <Button
                     variant="link" 
@@ -200,7 +247,7 @@ const AssessmentTable = () => {
                 </TableCell>
                 <TableCell>
                   <Badge 
-                    variant={assessment.type === "Formative" ? "secondary" : "outline"}
+                    variant="secondary"
                     className="text-xs"
                   >
                     {assessment.type}

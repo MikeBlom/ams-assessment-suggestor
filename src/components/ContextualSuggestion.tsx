@@ -16,33 +16,47 @@ const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSug
     subject: "Biology 101",
     completedDate: "2 days ago",
     studentsCompleted: 23,
-    totalStudents: 27
+    totalStudents: 27,
+    quickStartOptions: [
+      {
+        type: "Recently assessed concepts",
+        action: "Retake: Photosynthesis Quiz",
+        detail: "Last assessed 1 week ago • 3 students requested retake"
+      },
+      {
+        type: "Recently completed assignments",
+        action: "Assess: Cell Structure Lab Report", 
+        detail: "Lab completed 2 days ago • 27 students submitted"
+      },
+      {
+        type: "Last assessment built",
+        action: "Duplicate: Mitosis Quiz Template",
+        detail: "Built 3 days ago • High student engagement"
+      }
+    ]
   };
 
-  const smartSuggestions = [
+  const suggestedAssessments = [
     {
-      type: "Recently assessed concepts",
-      title: "Retake: Photosynthesis Quiz",
-      description: "Allow students to reassess photosynthesis concepts",
-      icon: ScrollText,
-      context: "Last assessed 1 week ago • 3 students requested retake",
-      action: () => onResponse(true)
-    },
-    {
-      type: "Recently completed assignments",
-      title: "Assess: Cell Structure Lab Report",
-      description: "Create follow-up assessment for lab completion",
+      type: "Portfolio",
+      description: "Multi-step problem solving with reflection",
       icon: FileText,
-      context: "Lab completed 2 days ago • 27 students submitted",
-      action: () => onResponse(true)
+      features: ["Real-world application problems", "Step-by-step solution process", "Self-reflection component"],
+      reason: "Perfect for showing biological reasoning"
     },
     {
-      type: "Last assessment built",
-      title: "Duplicate: Mitosis Quiz Template",
-      description: "Use your successful mitosis quiz structure",
-      icon: Brain,
-      context: "Built 3 days ago • High student engagement",
-      action: () => onResponse(true)
+      type: "Discussion",
+      description: "Collaborative analysis of biological concepts",
+      icon: MessageSquare,
+      features: ["Peer concept comparison", "Strategy discussion", "Group insights"],
+      reason: "Great for complex biology topics"
+    },
+    {
+      type: "Quiz",
+      description: "Mixed question types testing core concepts",
+      icon: ScrollText,
+      features: ["Auto-graded problems", "Immediate feedback", "Multiple attempts"],
+      reason: "Most used for biology concepts"
     }
   ];
 
@@ -73,40 +87,64 @@ const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSug
                 <span>Completed {recentModule.completedDate}</span>
                 <span>{recentModule.studentsCompleted}/{recentModule.totalStudents} students</span>
               </div>
+              
+              {/* Quick Start Options in Green Section */}
+              <div className="mt-3 space-y-2">
+                {recentModule.quickStartOptions.map((option, index) => (
+                  <div key={index} className="text-sm">
+                    <div className="font-medium text-emerald-800">{option.action}</div>
+                    <div className="text-xs text-emerald-600">{option.detail}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </Card>
       </div>
 
-      {/* Smart Suggestions */}
+      {/* Assessment Type Suggestions */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-foreground">
-          Quick start options
+          Ready-to-use assessments for "{recentModule.title}"
         </h3>
         
         <div className="grid gap-4">
-          {smartSuggestions.map((suggestion, index) => (
+          {suggestedAssessments.map((assessment, index) => (
             <Card 
               key={index}
-              className="p-6 cursor-pointer transition-all border-2 hover:border-primary/30 hover:bg-accent/50 hover:shadow-md"
-              onClick={suggestion.action}
+              className={`p-6 cursor-pointer transition-all border-2 hover:shadow-md ${
+                index === 0
+                  ? 'border-primary/20 bg-primary/5 hover:border-primary/40' 
+                  : 'border-border hover:border-primary/30 hover:bg-accent/50'
+              }`}
+              onClick={() => onResponse(true)}
             >
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <suggestion.icon className="w-6 h-6 text-primary" />
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                  index === 0 ? 'bg-primary/10' : 'bg-accent'
+                }`}>
+                  <assessment.icon className={`w-6 h-6 ${
+                    index === 0 ? 'text-primary' : 'text-muted-foreground'
+                  }`} />
                 </div>
                 <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <h4 className="text-lg font-semibold text-foreground">{assessment.type}</h4>
+                    {index === 0 && <Badge variant="secondary">Recommended</Badge>}
+                  </div>
+                  <p className="text-muted-foreground mb-3">{assessment.description}</p>
+                  
                   <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                        {suggestion.type}
-                      </span>
+                    <div className="text-sm text-primary font-medium">
+                      {assessment.reason}
                     </div>
-                    <h4 className="text-lg font-semibold text-foreground">{suggestion.title}</h4>
-                    <p className="text-muted-foreground">{suggestion.description}</p>
-                    <p className="text-sm text-primary font-medium">
-                      {suggestion.context}
-                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {assessment.features.map((feature, featureIndex) => (
+                        <Badge key={featureIndex} variant="outline" className="text-xs">
+                          {feature}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 <ArrowRight className="w-5 h-5 text-muted-foreground" />
