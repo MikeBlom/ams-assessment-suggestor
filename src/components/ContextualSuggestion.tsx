@@ -11,68 +11,105 @@ interface ContextualSuggestionProps {
 }
 
 const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSuggestionProps) => {
-  // Mock recent module data - in real app this would come from context/API
-  const recentModule = {
-    title: "Cell Structure and Function",
-    subject: "Biology 101",
-    completedDate: "2 days ago",
-    studentsCompleted: 23,
-    totalStudents: 27
-  };
+  // Multiple recently completed modules in Biology 101
+  const recentlyCompleted = [
+    {
+      title: "Cell Structure and Function",
+      completedDate: "2 days ago",
+      studentsCompleted: 23,
+      totalStudents: 27
+    },
+    {
+      title: "Photosynthesis and Cellular Respiration",
+      completedDate: "1 week ago", 
+      studentsCompleted: 25,
+      totalStudents: 27
+    },
+    {
+      title: "DNA Replication and Protein Synthesis",
+      completedDate: "2 weeks ago",
+      studentsCompleted: 27,
+      totalStudents: 27
+    }
+  ];
 
   const assessmentOptions = {
     retake: [
       {
         type: "Quiz",
         title: "Photosynthesis Quiz",
-        description: "Mixed question types testing core concepts",
+        description: "Light-dependent and light-independent reactions",
         icon: ScrollText,
         features: ["Auto-graded problems", "Immediate feedback", "Multiple attempts"],
-        detail: "Last assessed 1 week ago • 3 students requested retake"
+        detail: "From 'Photosynthesis and Cellular Respiration' • 3 students requested retake"
       },
       {
-        type: "Test",
-        title: "Cellular Respiration Test",
-        description: "Comprehensive assessment of cellular processes",
+        type: "Test", 
+        title: "Cell Organelles Test",
+        description: "Structure and function of cellular components",
         icon: FileText,
         features: ["Multiple choice", "Short answer", "Diagram labeling"],
-        detail: "Last assessed 2 weeks ago • 5 students requested retake"
+        detail: "From 'Cell Structure and Function' • 5 students requested retake"
+      },
+      {
+        type: "Quiz",
+        title: "DNA Structure Quiz", 
+        description: "Nucleotide composition and base pairing",
+        icon: ScrollText,
+        features: ["Interactive diagrams", "Immediate scoring", "Hint system"],
+        detail: "From 'DNA Replication and Protein Synthesis' • 2 students requested retake"
       }
     ],
     assess: [
       {
         type: "Portfolio",
         title: "Cell Structure Lab Report Assessment",
-        description: "Multi-step problem solving with reflection",
+        description: "Microscopy observations and analysis",
         icon: FileText,
-        features: ["Real-world application", "Step-by-step process", "Self-reflection"],
-        detail: "Lab completed 2 days ago • 27 students submitted"
+        features: ["Real-world application", "Scientific writing", "Data interpretation"],
+        detail: "From 'Cell Structure and Function' lab • 27 students submitted"
       },
       {
         type: "Discussion",
-        title: "Organelle Function Discussion",
-        description: "Collaborative analysis of cellular components",
+        title: "Photosynthesis vs Cellular Respiration",
+        description: "Compare and contrast energy processes",
         icon: MessageSquare,
-        features: ["Peer comparison", "Strategy discussion", "Group insights"],
-        detail: "Discussion completed yesterday • 25 students participated"
+        features: ["Peer comparison", "Process analysis", "Energy flow concepts"],
+        detail: "From 'Photosynthesis and Cellular Respiration' • 25 students participated"
+      },
+      {
+        type: "Project",
+        title: "DNA Mutation Case Study",
+        description: "Analyze real genetic disorders",
+        icon: Brain,
+        features: ["Case-based learning", "Research component", "Presentation element"],
+        detail: "From 'DNA Replication and Protein Synthesis' • Research presentations due"
       }
     ],
     duplicate: [
       {
         type: "Quiz",
         title: "Mitosis Quiz Template",
-        description: "Cell division process assessment",
+        description: "Cell division phases and checkpoints",
         icon: ScrollText,
-        features: ["Multiple formats", "Auto-grading", "Visual diagrams"],
-        detail: "Built 3 days ago • High student engagement"
+        features: ["Visual diagrams", "Phase identification", "Process sequencing"],
+        detail: "Built 3 days ago • High student engagement (92% completion)"
       },
       {
         type: "Test",
         title: "Biology Unit Test Template",
-        description: "Comprehensive unit assessment format",
+        description: "Comprehensive cellular biology assessment",
         icon: FileText,
-        features: ["Standards aligned", "Mixed question types", "Rubric included"],
+        features: ["Outcomes aligned", "Mixed question types", "Detailed rubric"],
         detail: "Built last week • Used by 3 other instructors"
+      },
+      {
+        type: "Portfolio",
+        title: "Lab Report Portfolio Template",
+        description: "Scientific method and data analysis framework",
+        icon: Users,
+        features: ["Structured format", "Reflection prompts", "Peer review component"],
+        detail: "Built 2 weeks ago • Improved student writing by 15%"
       }
     ],
     scratch: [
@@ -165,22 +202,26 @@ const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSug
           </div>
         </div>
 
-        <Card className="p-4 bg-emerald-50 border-emerald-200">
-          <div className="flex items-start justify-between">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
-                <span className="text-sm font-medium text-emerald-800">Recently completed</span>
-              </div>
-              <h3 className="font-semibold text-emerald-900">{recentModule.title}</h3>
-              <p className="text-sm text-emerald-700">{recentModule.subject}</p>
-              <div className="flex items-center space-x-4 text-xs text-emerald-600">
-                <span>Completed {recentModule.completedDate}</span>
-                <span>{recentModule.studentsCompleted}/{recentModule.totalStudents} students</span>
-              </div>
-            </div>
+        {/* Recently Completed Items */}
+        <div className="space-y-3">
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="w-4 h-4 text-emerald-600" />
+            <span className="text-sm font-medium text-foreground">Recently completed</span>
           </div>
-        </Card>
+          <div className="grid gap-3">
+            {recentlyCompleted.map((item, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border">
+                <div>
+                  <h4 className="font-medium text-foreground">{item.title}</h4>
+                  <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                    <span>Completed {item.completedDate}</span>
+                    <span>{item.studentsCompleted}/{item.totalStudents} students</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Action Tabs */}
