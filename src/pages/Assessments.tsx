@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Navigation from "@/components/Navigation";
+
 import AssessmentFilters from "@/components/AssessmentFilters";
 import AssessmentTable from "@/components/AssessmentTable";
 import AssessmentCreationOverlay from "@/components/AssessmentCreationOverlay";
@@ -11,8 +11,6 @@ const Assessments = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
       <main className="p-6">
         <div className="max-w-[1400px] mx-auto space-y-6">
           <div className="flex items-center justify-between">
