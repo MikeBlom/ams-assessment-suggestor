@@ -77,8 +77,8 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
               <span className="font-semibold">AI Assistant</span>
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-medium">How can I help you? Would you like a summary of your progress?</h3>
-              <p className="text-white/80 text-sm">Get personalized assessment suggestions based on your teaching context</p>
+              <h3 className="text-lg font-medium">Based on your Cell Biology unit, try a Photosynthesis Lab Report?</h3>
+              <p className="text-white/80 text-sm">Perfect for assessing student understanding of energy conversion processes</p>
             </div>
             <div className="flex gap-3">
               <Button 
@@ -87,14 +87,14 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
                 onClick={onAiSuggestion}
                 className="bg-white/20 hover:bg-white/30 text-white border-white/30"
               >
-                Yes, please
+                Create This Assessment
               </Button>
               <Button 
                 variant="ghost" 
                 size="sm"
                 className="text-white hover:bg-white/10"
               >
-                Something else
+                Browse All Types
               </Button>
             </div>
           </div>
