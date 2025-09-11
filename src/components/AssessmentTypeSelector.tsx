@@ -196,7 +196,7 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
 
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-white/80">Base recommendations on:</span>
+              <span className="text-sm text-white/80">Unit recommendations:</span>
               <Select value={selectedUnit} onValueChange={handleUnitChange}>
                 <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white [&>span]:text-white">
                   <SelectValue />
