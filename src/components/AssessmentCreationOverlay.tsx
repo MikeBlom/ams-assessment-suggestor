@@ -10,19 +10,25 @@ interface AssessmentCreationOverlayProps {
   onClose: () => void;
 }
 
-type FlowStep = "contextual" | "type-selection";
+type FlowStep = "type-selection" | "contextual";
 
 const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverlayProps) => {
-  const [currentStep, setCurrentStep] = useState<FlowStep>("contextual");
+  const [currentStep, setCurrentStep] = useState<FlowStep>("type-selection");
 
   if (!isOpen) return null;
 
+  const handleAiSuggestion = () => {
+    setCurrentStep("contextual");
+  };
 
   const handleContextualResponse = (accepted: boolean) => {
     if (accepted) {
       // Would navigate to pre-configured builder
       console.log("Navigating to pre-configured assessment builder");
       onClose();
+    } else {
+      // Return to type selection
+      setCurrentStep("type-selection");
     }
   };
 
@@ -39,26 +45,25 @@ const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverla
 
   const renderCurrentStep = () => {
     switch (currentStep) {
-      case "contextual":
-        return (
-          <ContextualSuggestion 
-            onResponse={handleContextualResponse}
-            onBrowseAll={handleBrowseAll}
-          />
-        );
       case "type-selection":
         return (
           <AssessmentTypeSelector 
             onSelect={handleTypeSelection}
-            onBack={() => setCurrentStep("contextual")}
-            fromContextual={true}
+            onAiSuggestion={handleAiSuggestion}
+          />
+        );
+      case "contextual":
+        return (
+          <ContextualSuggestion 
+            onResponse={handleContextualResponse}
+            onBrowseAll={() => setCurrentStep("type-selection")}
           />
         );
       default:
         return (
-          <ContextualSuggestion 
-            onResponse={handleContextualResponse}
-            onBrowseAll={handleBrowseAll}
+          <AssessmentTypeSelector 
+            onSelect={handleTypeSelection}
+            onAiSuggestion={handleAiSuggestion}
           />
         );
     }

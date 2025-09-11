@@ -5,11 +5,10 @@ import { Badge } from "@/components/ui/badge";
 
 interface ContextualSuggestionProps {
   onResponse: (accepted: boolean) => void;
-  onBack?: () => void;
   onBrowseAll: () => void;
 }
 
-const ContextualSuggestion = ({ onResponse, onBack, onBrowseAll }: ContextualSuggestionProps) => {
+const ContextualSuggestion = ({ onResponse, onBrowseAll }: ContextualSuggestionProps) => {
   // Mock recent module data - in real app this would come from context/API
   const recentModule = {
     title: "Linear Equations and Inequalities",

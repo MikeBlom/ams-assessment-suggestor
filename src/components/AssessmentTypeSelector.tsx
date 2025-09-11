@@ -1,196 +1,131 @@
 import { useState } from "react";
-import { ArrowLeft, FileText, MessageSquare, Brain, Video, Eye, Grid, TreePine, ScrollText, ChevronDown, ChevronUp } from "lucide-react";
+import { X, Lightbulb, BookOpen, FileText, MessageCircle, Folder, Video, Clipboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 interface AssessmentTypeSelectorProps {
   onSelect: (type: string) => void;
-  onBack: () => void;
-  fromContextual?: boolean;
+  onAiSuggestion: () => void;
 }
 
-const AssessmentTypeSelector = ({ onSelect, onBack, fromContextual }: AssessmentTypeSelectorProps) => {
-  const [showAllTypes, setShowAllTypes] = useState(false);
-
-  const recommendedTypes = [
+const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSelectorProps) => {
+  const assessmentTypes = [
     {
       id: "quiz",
       name: "Quiz",
-      description: "Multiple choice, short answer, and mixed question types",
-      icon: ScrollText,
-      features: ["Auto-grading", "Question banks", "Time limits", "Multiple attempts"],
-      reason: "Most used for algebra concepts"
+      description: "Quick knowledge checks and formative assessments",
+      icon: BookOpen,
+      color: "bg-blue-50 text-blue-600"
     },
     {
       id: "assignment",
       name: "Assignment", 
-      description: "Traditional project or task-based assessment",
+      description: "Comprehensive tasks and projects",
       icon: FileText,
-      features: ["File submissions", "Rubric grading", "Due dates", "Late penalties"],
-      reason: "Great for problem-solving practice"
+      color: "bg-green-50 text-green-600"
+    },
+    {
+      id: "discussion",
+      name: "Discussion",
+      description: "Collaborative conversations and peer learning",
+      icon: MessageCircle,
+      color: "bg-purple-50 text-purple-600"
     },
     {
       id: "portfolio",
       name: "Portfolio",
-      description: "Collection of student work demonstrating growth",
-      icon: Grid,
-      features: ["Multiple artifacts", "Reflection prompts", "Progress tracking", "Showcase format"],
-      reason: "Perfect for showing mathematical reasoning"
-    }
-  ];
-
-  const allAssessmentTypes = [
-    ...recommendedTypes,
-    {
-      id: "discussion",
-      name: "Discussion",
-      description: "Collaborative conversation and peer interaction", 
-      icon: MessageSquare,
-      features: ["Threaded replies", "Peer responses", "Moderation tools", "Grading criteria"]
-    },
-    {
-      id: "llm-powered",
-      name: "LLM-powered Assignment",
-      description: "AI-assisted assessment with intelligent feedback",
-      icon: Brain,
-      features: ["AI feedback", "Smart grading", "Writing analysis", "Plagiarism detection"],
-      badge: "New"
+      description: "Collection of student work over time",
+      icon: Folder,
+      color: "bg-orange-50 text-orange-600"
     },
     {
       id: "video",
       name: "Video",
-      description: "Video recording or presentation assessment",
+      description: "Video submissions and presentations",
       icon: Video,
-      features: ["Recording tools", "Time limits", "Annotation support", "Privacy controls"]
+      color: "bg-red-50 text-red-600"
     },
     {
       id: "observation",
       name: "Observation with Rubric",
-      description: "Real-time assessment with structured observation",
-      icon: Eye,
-      features: ["Custom rubrics", "Real-time scoring", "Evidence collection", "Multiple observers"]
-    },
-    {
-      id: "adaptive",
-      name: "Adaptive",
-      description: "Assessment that adapts difficulty based on student responses",
-      icon: TreePine,
-      features: ["Difficulty adjustment", "Personalized paths", "Smart progression", "Analytics"],
-      badge: "Advanced"
-    },
-    {
-      id: "branching",
-      name: "Branching",
-      description: "Conditional pathways based on student choices and performance",
-      icon: TreePine,
-      features: ["Conditional logic", "Multiple scenarios", "Decision trees", "Custom flows"],
-      badge: "Advanced"
+      description: "Performance-based assessment with structured criteria",
+      icon: Clipboard,
+      color: "bg-yellow-50 text-yellow-600"
     }
   ];
 
-  const typesToShow = showAllTypes ? allAssessmentTypes : recommendedTypes;
-
   return (
     <div className="space-y-6">
-      {/* Back Button */}
-      <Button 
-        variant="ghost" 
-        onClick={onBack}
-        className="text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to options
-      </Button>
-
       {/* Header */}
-      <div className="space-y-2">
-        <h2 className="text-2xl font-semibold text-foreground">
-          {showAllTypes ? "All Assessment Types" : "Recommended for You"}
-        </h2>
-        <p className="text-muted-foreground">
-          {showAllTypes 
-            ? "Browse all available assessment types"
-            : "Based on your recent Linear Equations module and math teaching patterns"
-          }
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold text-foreground">Create Assessment</h2>
+          <p className="text-muted-foreground">Choose the type of assessment you'd like to create</p>
+        </div>
       </div>
+
+      {/* AI Suggestion Card */}
+      <Card className="relative overflow-hidden border-0 p-6" style={{
+        background: 'linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%)'
+      }}>
+        <div className="flex items-center justify-between text-white">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                <Lightbulb className="w-4 h-4" />
+              </div>
+              <span className="font-semibold">AI Assistant</span>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium">How can I help you? Would you like a summary of your progress?</h3>
+              <p className="text-white/80 text-sm">Get personalized assessment suggestions based on your teaching context</p>
+            </div>
+            <div className="flex gap-3">
+              <Button 
+                variant="secondary" 
+                size="sm"
+                onClick={onAiSuggestion}
+                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+              >
+                Yes, please
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="text-white hover:bg-white/10"
+              >
+                Something else
+              </Button>
+            </div>
+          </div>
+          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <Lightbulb className="w-6 h-6" />
+          </div>
+        </div>
+      </Card>
 
       {/* Assessment Types Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {typesToShow.map((type) => (
-          <Card 
-            key={type.id}
-            className="p-6 hover:bg-accent/50 cursor-pointer transition-all border-2 hover:border-primary/30 hover:shadow-md"
-            onClick={() => onSelect(type.id)}
-          >
-            <div className="space-y-4">
-              {/* Header with Icon and Badges */}
-              <div className="flex items-start justify-between">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <type.icon className="w-6 h-6 text-primary" />
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium text-foreground">Or choose an assessment type</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {assessmentTypes.map((type) => (
+            <Card 
+              key={type.id}
+              className="p-4 hover:shadow-md cursor-pointer transition-all border border-gray-200 hover:border-gray-300"
+              onClick={() => onSelect(type.id)}
+            >
+              <div className="space-y-3">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${type.color}`}>
+                  <type.icon className="w-5 h-5" />
                 </div>
-                <div className="flex flex-col space-y-1">
-                  {'badge' in type && type.badge && (
-                    <Badge variant="outline" className="text-xs">{type.badge}</Badge>
-                  )}
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-foreground">{type.name}</h4>
+                  <p className="text-sm text-muted-foreground">{type.description}</p>
                 </div>
               </div>
-
-              {/* Title and Description */}
-              <div className="space-y-2">
-                <h3 className="font-semibold text-foreground">{type.name}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {type.description}
-                </p>
-                {'reason' in type && (
-                  <p className="text-xs text-primary font-medium">
-                    {type.reason}
-                  </p>
-                )}
-              </div>
-
-              {/* Features */}
-              <div className="space-y-2">
-                <div className="text-xs font-medium text-foreground">Key features:</div>
-                <ul className="text-xs text-muted-foreground space-y-1">
-                  {type.features.slice(0, 3).map((feature, index) => (
-                    <li key={index} className="flex items-center space-x-2">
-                      <div className="w-1 h-1 bg-primary rounded-full" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                  {type.features.length > 3 && (
-                    <li className="text-primary font-medium">
-                      +{type.features.length - 3} more features
-                    </li>
-                  )}
-                </ul>
-              </div>
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {/* Toggle to show all types */}
-      <div className="text-center pt-4 border-t border-border">
-        <Button 
-          variant="outline" 
-          onClick={() => setShowAllTypes(!showAllTypes)}
-          className="w-full"
-        >
-          {showAllTypes ? (
-            <>
-              <ChevronUp className="w-4 h-4 mr-2" />
-              Show recommended only
-            </>
-          ) : (
-            <>
-              <ChevronDown className="w-4 h-4 mr-2" />
-              Browse all assessment types
-            </>
-          )}
-        </Button>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
