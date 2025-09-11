@@ -16,11 +16,11 @@ const Assessments = () => {
       <main className="p-6">
         <div className="max-w-[1400px] mx-auto space-y-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-semibold text-foreground">
-              Assessments
+            <h1 className="text-2xl font-bold text-foreground">
+              Biology Assessments
             </h1>
             <Button 
-              className="bg-primary hover:bg-primary/90"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
               onClick={() => setIsCreationOverlayOpen(true)}
             >
               <Plus className="w-4 h-4 mr-2" />

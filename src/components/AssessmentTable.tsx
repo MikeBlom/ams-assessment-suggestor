@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Plus, Tag, Download, Share, Trash2 } from "lucide-react";
+import { ChevronDown, Plus, Tag, Download, Share, Trash2, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -136,121 +136,111 @@ const AssessmentTable = () => {
   const allSelected = selectedItems.length === assessments.length;
   const someSelected = selectedItems.length > 0 && selectedItems.length < assessments.length;
 
+  const filteredAssessments = showSelected 
+    ? assessments.filter(a => selectedItems.includes(a.id))
+    : assessments;
+
+  const getTypeColor = (type: string) => {
+    const colors = {
+      'Quiz': 'bg-blue-100 text-blue-800',
+      'Assignment': 'bg-green-100 text-green-800', 
+      'Discussion': 'bg-purple-100 text-purple-800',
+      'Portfolio': 'bg-orange-100 text-orange-800',
+      'Video': 'bg-red-100 text-red-800',
+      'Observation with Rubric': 'bg-yellow-100 text-yellow-800'
+    };
+    return colors[type as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+  };
+
   return (
     <div className="space-y-4">
       {selectedItems.length > 0 && (
-        <div className="flex items-center justify-between p-3 bg-accent rounded-lg">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowSelected(!showSelected)}
-            >
-              Show ({selectedItems.length}) Selected Only
-            </Button>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Plus className="w-4 h-4 mr-1" />
-                  Add to
-                  <ChevronDown className="w-4 h-4 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Add to Collection</DropdownMenuItem>
-                <DropdownMenuItem>Add to Course</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Tag className="w-4 h-4 mr-1" />
-                  Tag
-                  <ChevronDown className="w-4 h-4 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Add Tag</DropdownMenuItem>
-                <DropdownMenuItem>Remove Tag</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-1" />
-              Export
-            </Button>
-
-            <Button variant="outline" size="sm">
-              <Share className="w-4 h-4 mr-1" />
-              Distribute
-            </Button>
-
-            <Button variant="outline" size="sm">
-              <Trash2 className="w-4 h-4 mr-1" />
-              Delete
-            </Button>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-blue-900">
+                {selectedItems.length} item{selectedItems.length !== 1 ? 's' : ''} selected
+              </span>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowSelected(!showSelected)}
+                className="text-blue-700 border-blue-300 hover:bg-blue-100"
+              >
+                {showSelected ? 'Show All' : 'Show Selected'}
+              </Button>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm" className="text-blue-700 border-blue-300 hover:bg-blue-100">
+                Add to Collection
+              </Button>
+              <Button variant="outline" size="sm" className="text-blue-700 border-blue-300 hover:bg-blue-100">
+                Add to Course
+              </Button>
+              <Button variant="outline" size="sm" className="text-blue-700 border-blue-300 hover:bg-blue-100">
+                Tag
+              </Button>
+              <Button variant="outline" size="sm" className="text-blue-700 border-blue-300 hover:bg-blue-100">
+                Export
+              </Button>
+              <Button variant="outline" size="sm" className="text-blue-700 border-blue-300 hover:bg-blue-100">
+                Distribute
+              </Button>
+              <Button variant="destructive" size="sm">
+                Delete
+              </Button>
+            </div>
           </div>
         </div>
       )}
 
-      <div className="rounded-lg border bg-card">
+      <div className="bg-white rounded-lg border border-gray-200">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-50">
             <TableRow>
               <TableHead className="w-12">
                 <Checkbox
                   checked={allSelected}
                   onCheckedChange={handleSelectAll}
-                  className={someSelected ? "data-[state=checked]:bg-primary/50" : ""}
+                  aria-label="Select all assessments"
                 />
               </TableHead>
-              <TableHead className="font-medium">Name</TableHead>
-              <TableHead className="font-medium">Standards</TableHead>
-              <TableHead className="font-medium">Subject</TableHead>
-              <TableHead className="font-medium">Type</TableHead>
+              <TableHead className="font-medium text-gray-700">Assessment Name</TableHead>
+              <TableHead className="font-medium text-gray-700">Standards</TableHead>
+              <TableHead className="font-medium text-gray-700">Subject</TableHead>
+              <TableHead className="font-medium text-gray-700">Type</TableHead>
+              <TableHead className="w-24 font-medium text-gray-700">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {assessments.map((assessment) => (
-              <TableRow key={assessment.id} className="hover:bg-muted/50">
+            {filteredAssessments.map((assessment) => (
+              <TableRow key={assessment.id} className="hover:bg-gray-50">
                 <TableCell>
                   <Checkbox
                     checked={selectedItems.includes(assessment.id)}
-                    onCheckedChange={(checked) => 
-                      handleSelectItem(assessment.id, checked as boolean)
-                    }
+                    onCheckedChange={(checked) => handleSelectItem(assessment.id, checked as boolean)}
+                    aria-label={`Select ${assessment.name}`}
                   />
                 </TableCell>
-                <TableCell>
-                  <Button
-                    variant="link"
-                    className="p-0 h-auto text-primary font-normal text-left"
-                  >
-                    {assessment.name}
-                  </Button>
+                <TableCell className="font-medium text-gray-900">{assessment.name}</TableCell>
+                <TableCell className="text-gray-600">
+                  {assessment.standards}
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="link" 
-                    className="p-0 h-auto text-primary font-normal text-left"
-                  >
-                    {assessment.standards}
-                  </Button>
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {assessment.subject}
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {assessment.subject}
+                  </span>
                 </TableCell>
                 <TableCell>
-                  <Badge 
-                    variant={assessment.type === "Quiz" ? "secondary" : "outline"}
-                    className="text-xs"
-                  >
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(assessment.type)}`}>
                     {assessment.type}
-                  </Badge>
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <Button variant="ghost" size="sm">
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
