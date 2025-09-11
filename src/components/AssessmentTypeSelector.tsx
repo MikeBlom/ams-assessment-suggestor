@@ -85,6 +85,20 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
       description: "Performance-based assessment with structured criteria",
       icon: Clipboard,
       color: "bg-yellow-50 text-yellow-600"
+    },
+    {
+      id: "adaptive",
+      name: "Adaptive",
+      description: "Assessment that adapts difficulty based on student responses",
+      icon: RefreshCw,
+      color: "bg-indigo-50 text-indigo-600"
+    },
+    {
+      id: "branching",
+      name: "Branching",
+      description: "Conditional pathways based on student choices and performance",
+      icon: Upload,
+      color: "bg-teal-50 text-teal-600"
     }
   ];
 
