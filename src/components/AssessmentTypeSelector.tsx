@@ -194,28 +194,27 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
             </div>
           </div>
 
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-white/80">Unit recommendations:</span>
+              <Select value={selectedUnit} onValueChange={handleUnitChange}>
+                <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white [&>span]:text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {units.map((unit) => (
+                    <SelectItem key={unit.id} value={unit.id}>
+                      {unit.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           <div className="space-y-2">
-            <h3 className="text-lg font-medium flex items-center gap-2 flex-wrap">
-              {isRegenerating ? (
-                "Thinking of new suggestions..."
-              ) : (
-                <>
-                  Based on your{" "}
-                  <Select value={selectedUnit} onValueChange={handleUnitChange}>
-                    <SelectTrigger className="w-auto min-w-32 bg-white/20 border-white/30 text-white [&>span]:text-white inline-flex">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {units.map((unit) => (
-                        <SelectItem key={unit.id} value={unit.id}>
-                          {unit.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {" "}unit, try a Photosynthesis Lab Report?
-                </>
-              )}
+            <h3 className="text-lg font-medium">
+              {isRegenerating ? "Thinking of new suggestions..." : currentSuggestion.title}
             </h3>
             <p className="text-white/80 text-sm">
               {isRegenerating ? "Please wait while I generate fresh ideas" : currentSuggestion.description}
