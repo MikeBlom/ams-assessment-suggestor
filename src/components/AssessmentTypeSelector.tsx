@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Lightbulb, BookOpen, FileText, MessageCircle, Folder, Video, Clipboard, RefreshCw, Upload } from "lucide-react";
+import { X, Sparkles, BookOpen, FileText, MessageCircle, Folder, Video, Clipboard, RefreshCw, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -120,12 +120,12 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                <Lightbulb className="w-4 h-4" />
+                <Sparkles className="w-4 h-4" />
               </div>
               <span className="font-semibold">AI Assistant</span>
             </div>
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-              <Lightbulb className="w-6 h-6" />
+              <Sparkles className="w-6 h-6" />
             </div>
           </div>
 
