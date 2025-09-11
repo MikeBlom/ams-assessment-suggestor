@@ -2,6 +2,7 @@ import { useState } from "react";
 import { X, Sparkles, BookOpen, FileText, MessageCircle, Folder, Video, Clipboard, RefreshCw, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface AssessmentTypeSelectorProps {
   onSelect: (type: string) => void;
@@ -10,33 +11,100 @@ interface AssessmentTypeSelectorProps {
 
 const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSelectorProps) => {
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [selectedUnit, setSelectedUnit] = useState("cell-biology");
   const [currentSuggestion, setCurrentSuggestion] = useState({
     title: "Based on your Cell Biology unit, try a Photosynthesis Lab Report?",
     description: "Perfect for assessing student understanding of energy conversion processes"
   });
 
-  const suggestions = [
-    {
-      title: "Based on your Cell Biology unit, try a Photosynthesis Lab Report?",
-      description: "Perfect for assessing student understanding of energy conversion processes"
-    },
-    {
-      title: "How about a Cellular Respiration Quiz for your Energy Transfer module?",
-      description: "Great for checking comprehension of ATP production and metabolic pathways"
-    },
-    {
-      title: "Consider a DNA Replication Discussion based on your recent genetics lessons?",
-      description: "Encourages collaborative learning about molecular biology concepts"
-    }
+  const units = [
+    { id: "cell-biology", name: "Cell Biology" },
+    { id: "genetics", name: "Genetics" },
+    { id: "evolution", name: "Evolution" },
+    { id: "ecology", name: "Ecology" },
+    { id: "molecular-biology", name: "Molecular Biology" },
+    { id: "anatomy", name: "Anatomy & Physiology" }
   ];
+
+  const suggestionsByUnit: Record<string, Array<{title: string, description: string}>> = {
+    "cell-biology": [
+      {
+        title: "Based on your Cell Biology unit, try a Photosynthesis Lab Report?",
+        description: "Perfect for assessing student understanding of energy conversion processes"
+      },
+      {
+        title: "How about a Cell Membrane Permeability Quiz?",
+        description: "Great for testing understanding of transport mechanisms"
+      }
+    ],
+    "genetics": [
+      {
+        title: "Consider a DNA Replication Discussion based on your genetics lessons?",
+        description: "Encourages collaborative learning about molecular biology concepts"
+      },
+      {
+        title: "Try a Punnett Square Problem Set?",
+        description: "Perfect for practicing inheritance patterns and probability"
+      }
+    ],
+    "evolution": [
+      {
+        title: "How about a Natural Selection Case Study?",
+        description: "Analyze real-world examples of evolutionary processes"
+      },
+      {
+        title: "Consider a Phylogenetic Tree Construction Assignment?",
+        description: "Build understanding of evolutionary relationships"
+      }
+    ],
+    "ecology": [
+      {
+        title: "Try an Ecosystem Energy Flow Diagram?",
+        description: "Visualize energy transfer through trophic levels"
+      },
+      {
+        title: "How about a Population Dynamics Simulation?",
+        description: "Model predator-prey relationships and carrying capacity"
+      }
+    ],
+    "molecular-biology": [
+      {
+        title: "Consider a Protein Synthesis Animation Project?",
+        description: "Create visual representations of transcription and translation"
+      },
+      {
+        title: "Try an Enzyme Kinetics Lab Report?",
+        description: "Analyze factors affecting enzyme activity and rates"
+      }
+    ],
+    "anatomy": [
+      {
+        title: "How about a Body System Integration Quiz?",
+        description: "Test understanding of how organ systems work together"
+      },
+      {
+        title: "Consider a Physiological Response Case Study?",
+        description: "Analyze how the body responds to different stimuli"
+      }
+    ]
+  };
 
   const handleRegenerate = () => {
     setIsRegenerating(true);
     setTimeout(() => {
+      const suggestions = suggestionsByUnit[selectedUnit] || [];
       const randomIndex = Math.floor(Math.random() * suggestions.length);
       setCurrentSuggestion(suggestions[randomIndex]);
       setIsRegenerating(false);
     }, 1000);
+  };
+
+  const handleUnitChange = (unitId: string) => {
+    setSelectedUnit(unitId);
+    const suggestions = suggestionsByUnit[unitId] || [];
+    if (suggestions.length > 0) {
+      setCurrentSuggestion(suggestions[0]);
+    }
   };
 
   const handleFileUpload = () => {
@@ -124,8 +192,23 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
               </div>
               <span className="font-semibold">AI Assistant</span>
             </div>
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-6 h-6" />
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-white/80">Base recommendations on:</span>
+              <Select value={selectedUnit} onValueChange={handleUnitChange}>
+                <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white [&>span]:text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {units.map((unit) => (
+                    <SelectItem key={unit.id} value={unit.id}>
+                      {unit.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
