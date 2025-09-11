@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Lightbulb, BookOpen, FileText, MessageCircle, Folder, Video, Clipboard } from "lucide-react";
+import { X, Lightbulb, BookOpen, FileText, MessageCircle, Folder, Video, Clipboard, RefreshCw, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -9,6 +9,40 @@ interface AssessmentTypeSelectorProps {
 }
 
 const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSelectorProps) => {
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [currentSuggestion, setCurrentSuggestion] = useState({
+    title: "Based on your Cell Biology unit, try a Photosynthesis Lab Report?",
+    description: "Perfect for assessing student understanding of energy conversion processes"
+  });
+
+  const suggestions = [
+    {
+      title: "Based on your Cell Biology unit, try a Photosynthesis Lab Report?",
+      description: "Perfect for assessing student understanding of energy conversion processes"
+    },
+    {
+      title: "How about a Cellular Respiration Quiz for your Energy Transfer module?",
+      description: "Great for checking comprehension of ATP production and metabolic pathways"
+    },
+    {
+      title: "Consider a DNA Replication Discussion based on your recent genetics lessons?",
+      description: "Encourages collaborative learning about molecular biology concepts"
+    }
+  ];
+
+  const handleRegenerate = () => {
+    setIsRegenerating(true);
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * suggestions.length);
+      setCurrentSuggestion(suggestions[randomIndex]);
+      setIsRegenerating(false);
+    }, 1000);
+  };
+
+  const handleFileUpload = () => {
+    // Would open file picker for PowerPoint, PDFs, etc.
+    console.log("Opening file picker for source materials");
+  };
   const assessmentTypes = [
     {
       id: "quiz",
@@ -68,38 +102,64 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
       <Card className="relative overflow-hidden border-0 p-6" style={{
         background: 'linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%)'
       }}>
-        <div className="flex items-center justify-between text-white">
-          <div className="space-y-3">
+        <div className="space-y-4 text-white">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                 <Lightbulb className="w-4 h-4" />
               </div>
               <span className="font-semibold">AI Assistant</span>
             </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium">Based on your Cell Biology unit, try a Photosynthesis Lab Report?</h3>
-              <p className="text-white/80 text-sm">Perfect for assessing student understanding of energy conversion processes</p>
-            </div>
-            <div className="flex gap-3">
-              <Button 
-                variant="secondary" 
-                size="sm"
-                onClick={onAiSuggestion}
-                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-              >
-                Create This Assessment
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="text-white hover:bg-white/10"
-              >
-                Browse All Types
-              </Button>
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <Lightbulb className="w-6 h-6" />
             </div>
           </div>
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-            <Lightbulb className="w-6 h-6" />
+
+          <div className="space-y-2">
+            <h3 className="text-lg font-medium">
+              {isRegenerating ? "Thinking of new suggestions..." : currentSuggestion.title}
+            </h3>
+            <p className="text-white/80 text-sm">
+              {isRegenerating ? "Please wait while I generate fresh ideas" : currentSuggestion.description}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <Button 
+              variant="secondary" 
+              size="sm"
+              onClick={onAiSuggestion}
+              className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+              disabled={isRegenerating}
+            >
+              Create This Assessment
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={handleRegenerate}
+              disabled={isRegenerating}
+              className="text-white hover:bg-white/10"
+            >
+              {isRegenerating ? (
+                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4 mr-2" />
+              )}
+              Regenerate Suggestions
+            </Button>
+          </div>
+
+          <div className="pt-3 border-t border-white/20">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={handleFileUpload}
+              className="text-white hover:bg-white/10 w-full justify-start"
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Upload your materials (PowerPoint, notes) for tailored suggestions
+            </Button>
           </div>
         </div>
       </Card>
