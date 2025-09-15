@@ -11,13 +11,13 @@ interface AssessmentTypeSelectorProps {
 
 const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSelectorProps) => {
   const [isRegenerating, setIsRegenerating] = useState(false);
-  const [selectedUnit, setSelectedUnit] = useState("cell-biology");
+  const [selectedModule, setSelectedModule] = useState("cell-biology");
   const [currentSuggestion, setCurrentSuggestion] = useState({
-    title: "Based on your Cell Biology unit, try a Photosynthesis Lab Report?",
+    title: "Based on your Cell Biology module, try a Photosynthesis Lab Report?",
     description: "Perfect for assessing student understanding of energy conversion processes"
   });
 
-  const units = [
+  const modules = [
     { id: "cell-biology", name: "Cell Biology" },
     { id: "genetics", name: "Genetics" },
     { id: "evolution", name: "Evolution" },
@@ -26,10 +26,10 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
     { id: "anatomy", name: "Anatomy & Physiology" }
   ];
 
-  const suggestionsByUnit: Record<string, Array<{title: string, description: string}>> = {
+  const suggestionsByModule: Record<string, Array<{title: string, description: string}>> = {
     "cell-biology": [
       {
-        title: "Based on your Cell Biology unit, try a Photosynthesis Lab Report?",
+        title: "Based on your Cell Biology module, try a Photosynthesis Lab Report?",
         description: "Perfect for assessing student understanding of energy conversion processes"
       },
       {
@@ -92,16 +92,16 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
   const handleRegenerate = () => {
     setIsRegenerating(true);
     setTimeout(() => {
-      const suggestions = suggestionsByUnit[selectedUnit] || [];
+      const suggestions = suggestionsByModule[selectedModule] || [];
       const randomIndex = Math.floor(Math.random() * suggestions.length);
       setCurrentSuggestion(suggestions[randomIndex]);
       setIsRegenerating(false);
     }, 1000);
   };
 
-  const handleUnitChange = (unitId: string) => {
-    setSelectedUnit(unitId);
-    const suggestions = suggestionsByUnit[unitId] || [];
+  const handleModuleChange = (moduleId: string) => {
+    setSelectedModule(moduleId);
+    const suggestions = suggestionsByModule[moduleId] || [];
     if (suggestions.length > 0) {
       setCurrentSuggestion(suggestions[0]);
     }
@@ -196,15 +196,15 @@ const AssessmentTypeSelector = ({ onSelect, onAiSuggestion }: AssessmentTypeSele
 
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-white/80">Unit recommendations:</span>
-              <Select value={selectedUnit} onValueChange={handleUnitChange}>
+              <span className="text-sm text-white/80">Module recommendations:</span>
+              <Select value={selectedModule} onValueChange={handleModuleChange}>
                 <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white [&>span]:text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {units.map((unit) => (
-                    <SelectItem key={unit.id} value={unit.id}>
-                      {unit.name}
+                  {modules.map((module) => (
+                    <SelectItem key={module.id} value={module.id}>
+                      {module.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
