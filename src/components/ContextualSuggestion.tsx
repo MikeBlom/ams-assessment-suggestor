@@ -11,8 +11,8 @@ interface ContextualSuggestionProps {
 const ContextualSuggestion = ({ onResponse, onBrowseAll }: ContextualSuggestionProps) => {
   // Mock recent module data - in real app this would come from context/API
   const recentModule = {
-    title: "Linear Equations and Inequalities",
-    subject: "Algebra I",
+    title: "Photosynthesis and Cellular Respiration",
+    subject: "Biology",
     completedDate: "2 days ago",
     studentsCompleted: 23,
     totalStudents: 27
@@ -21,26 +21,26 @@ const ContextualSuggestion = ({ onResponse, onBrowseAll }: ContextualSuggestionP
   const suggestedAssessments = [
     {
       type: "Portfolio",
-      description: "Multi-step problem solving with reflection",
+      description: "Lab report with hypothesis, experiment, and analysis",
       icon: FileText,
       estimatedTime: "45 minutes",
-      features: ["Real-world application problems", "Step-by-step solution process", "Self-reflection component"],
+      features: ["Photosynthesis experiment design", "Data collection and analysis", "Scientific conclusion writing"],
       recommended: true
     },
     {
       type: "Discussion",
-      description: "Collaborative analysis of problem-solving approaches",
+      description: "Collaborative analysis of photosynthesis concepts",
       icon: MessageSquare,
       estimatedTime: "30 minutes",
-      features: ["Peer problem comparison", "Strategy discussion", "Group insights"],
+      features: ["Peer experiment comparison", "Process discussion", "Environmental factors analysis"],
       recommended: false
     },
     {
       type: "Quiz",
-      description: "Mixed question types testing core concepts",
+      description: "Mixed question types on photosynthesis and cellular respiration",
       icon: ScrollText,
       estimatedTime: "25 minutes", 
-      features: ["Auto-graded problems", "Immediate feedback", "Multiple attempts"],
+      features: ["Auto-graded questions", "Immediate feedback", "Multiple attempts"],
       recommended: false
     }
   ];
