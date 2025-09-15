@@ -38,7 +38,8 @@ const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverla
 
   const handleTypeSelection = (type: string) => {
     console.log("Creating assessment of type:", type);
-    // Would navigate to assessment builder with selected type
+    // Navigate to assessment builder with selected type
+    window.location.href = `/assessment-builder?type=${type}`;
     onClose();
   };
 
