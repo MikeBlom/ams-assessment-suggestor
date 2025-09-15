@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import AssessmentTypeSelector from "./AssessmentTypeSelector";
 import ContextualSuggestion from "./ContextualSuggestion";
+import LabReportTemplate from "./LabReportTemplate";
 
 interface AssessmentCreationOverlayProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-type FlowStep = "type-selection" | "contextual";
+type FlowStep = "type-selection" | "contextual" | "template-builder";
 
 const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverlayProps) => {
   const [currentStep, setCurrentStep] = useState<FlowStep>("type-selection");
@@ -23,9 +24,8 @@ const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverla
 
   const handleContextualResponse = (accepted: boolean) => {
     if (accepted) {
-      // Would navigate to pre-configured builder
-      console.log("Navigating to pre-configured assessment builder");
-      onClose();
+      // Move to template builder
+      setCurrentStep("template-builder");
     } else {
       // Return to type selection
       setCurrentStep("type-selection");
@@ -38,11 +38,27 @@ const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverla
 
   const handleTypeSelection = (type: string) => {
     console.log("Creating assessment of type:", type);
-    // Navigate to assessment builder with selected type
-    window.location.href = `/assessment-builder?type=${type}`;
+    // For Photosynthesis Lab Report, go to template builder
+    if (type === "lab-report") {
+      setCurrentStep("template-builder");
+    } else {
+      // For other types, navigate to builder
+      window.location.href = `/assessment-builder?type=${type}`;
+      onClose();
+    }
+  };
+
+
+  const handleTemplateComplete = () => {
+    console.log("Template completed, navigating to full builder");
+    // Navigate to full assessment builder
+    window.location.href = `/assessment-builder?type=lab-report&template=photosynthesis`;
     onClose();
   };
 
+  const handleTemplateBack = () => {
+    setCurrentStep("contextual");
+  };
 
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -58,6 +74,13 @@ const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverla
           <ContextualSuggestion 
             onResponse={handleContextualResponse}
             onBrowseAll={() => setCurrentStep("type-selection")}
+          />
+        );
+      case "template-builder":
+        return (
+          <LabReportTemplate 
+            onComplete={handleTemplateComplete}
+            onBack={handleTemplateBack}
           />
         );
       default:
