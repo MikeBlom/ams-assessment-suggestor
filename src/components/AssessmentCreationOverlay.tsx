@@ -19,7 +19,7 @@ const AssessmentCreationOverlay = ({ isOpen, onClose }: AssessmentCreationOverla
   if (!isOpen) return null;
 
   const handleAiSuggestion = () => {
-    setCurrentStep("contextual");
+    setCurrentStep("template-builder");
   };
 
   const handleContextualResponse = (accepted: boolean) => {
